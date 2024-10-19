@@ -5,7 +5,7 @@ There is one DB row for each (username, remote IP, event type), no auth events a
 
 **Algorithm**
 * ```check_range_sec```: forget events after this period 
-* ```ban_for_sec```: how long to ban (event_name,username.remote_ip) set
+* ```ban_for_sec```: how long to ban the (event_name,username.remote_ip) set
 * ```max_attempts```: max attempts in check_range_sec to allow before banning
 
 For each event match, check if last event was older than ```check_range_sec``` seconds. If older, update the epoch of last event (```event_inrange_ts```), take no further action. If in range of check, increment ```attemts_inrange```. If ```attempts_inrange``` exceed ```max_attempts```, update ```ban_until_ts``` timestamp. If ```ban_until_ts``` is non-zero, and ```ban_until_ts``` is > current epoch, a ban state is inferred.
