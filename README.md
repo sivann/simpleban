@@ -3,8 +3,9 @@ Checks a set of (username, remote IP, event type), and decides on BAN after maxi
 
 There is one DB row for each (username, remote IP, event type), no auth events are logged so it is rather economical on resources.
 
-Algorithm:
-For each event match, check if last event was older than check_range_sec seconds. If older, update the epoch of last event (event_inrange_ts), no further action. If in range of check, update attemts_inrange. If attempts exceed max_attempts, update ban_until_ts timestamp.
+**Algorithm**
+
+For each event match, check if last event was older than ```check_range_sec``` seconds. If older, update the epoch of last event (```event_inrange_ts```), take no further action. If in range of check, increment ```attemts_inrange```. If ```attempts_inrange``` exceed ```max_attempts```, update ```ban_until_ts``` timestamp. If ```ban_until_ts``` is non-zero, and ```ban_until_ts``` is > current epoch, a ban state is inferred.
 
 
 
@@ -25,7 +26,7 @@ watch -n 0.5  "echo 'select * from request_events' | sqlite3 -header -column ban
 python3 simpleban.py
 ```
 
-Each newline will produce a valid event, check if it gets banned.
+Each time you press newline, a new bannable event will be produced. Press enter fast enough to get a ban until ban_until_ts.
 
 
 
